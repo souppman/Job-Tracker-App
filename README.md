@@ -1,5 +1,13 @@
 # Job Tracker
 
+A full-stack job application tracking system built with React and Node.js.
+
+## Screenshots
+
+### Dashboard Overview
+![Job Tracker Dashboard](screenshots/dashboard.png)
+
+
 ## Setup Instructions
 
 • Install dependencies: `cd server && npm install` then `cd ../client && npm install`
