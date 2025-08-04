@@ -1,8 +1,7 @@
+import 'dotenv/config'; // loads env vars immediately on import for ES modules
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv'; // loads env vars so i dont hardcode this shit
-
-dotenv.config();
+import { jobsRouter } from './routes/jobsRoutes.js';
 
 //intilize the express app
 const app = express();
@@ -12,17 +11,26 @@ const PORT = process.env.PORT || 3000; // || just in case var is fucking up
 app.use(cors()); // to accept requests from other ports
 app.use(express.json()); // parse json bodies so it can be human readable access via req.body
 
-// route starter
-app.get('/', (req, res) => { // route to respond to gets only 
-    res.json({ message: 'JT API is runnin' }); // sending js ->jsonto client to get validation 
-}); // content type is json to app/json auto set by express
+// routes
+// this is the health check route
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'Job Tracker API is running!',
+        version: '1.0.0',
+        endpoints: {
+            jobs: '/api/jobs',
+            search: '/api/jobs/search',
+            filter: '/api/jobs/status'
+        }
+    });
+});
 
-// Other API routes will be going here
-app.get('/api/jobs', (req, res)=> {
-    res.json({ message: 'jobs endpoint???' });
-}) ;
+// mount job routes
+app.use('/api/jobs', jobsRouter);
+
+// Removed test route for security - no need to expose database connection testing in production
 
 // start the server
-app.listen(PORT,() => { // listen for requests on port 3000
-    console.log('server running on http://localhost:${PORT}');
+app.listen(PORT,() => { // listen for requests on port 3000 - no callback needed
+    console.log(`server running on http://localhost:${PORT}`);
 });
